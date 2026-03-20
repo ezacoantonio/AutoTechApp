@@ -1,9 +1,12 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { createTopic } from "../api/topics.js";
 import TopicEditor from "../components/TopicEditor.jsx";
+import { getRoadmapStepIdsFromSearchParams } from "../utils/roadmap.js";
 
 export default function NewTopicPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const initialRoadmapStepIds = getRoadmapStepIdsFromSearchParams(searchParams);
 
   const handleSubmit = async (payload) => {
     const topic = await createTopic(payload);
@@ -24,6 +27,7 @@ export default function NewTopicPage() {
       </section>
 
       <TopicEditor
+        initialRoadmapStepIds={initialRoadmapStepIds}
         onSubmit={handleSubmit}
         submitLabel="Save Topic"
         submittingLabel="Saving..."

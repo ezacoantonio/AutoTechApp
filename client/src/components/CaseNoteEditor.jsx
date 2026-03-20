@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import FormField from "./FormField.jsx";
+import RoadmapStepPicker from "./RoadmapStepPicker.jsx";
 
-const createCaseNoteForm = (caseNote = null) => ({
+const createCaseNoteForm = (caseNote = null, fallbackRoadmapStepIds = []) => ({
   vehicle: caseNote?.vehicle || "",
+  roadmapStepIds: Array.isArray(caseNote?.roadmapStepIds)
+    ? [...caseNote.roadmapStepIds]
+    : [...fallbackRoadmapStepIds],
   problem: caseNote?.problem || "",
   cause: caseNote?.cause || "",
   fix: caseNote?.fix || "",
@@ -11,19 +15,22 @@ const createCaseNoteForm = (caseNote = null) => ({
 
 export default function CaseNoteEditor({
   initialCaseNote = null,
+  initialRoadmapStepIds = [],
   onSubmit,
   onCancel,
   submitLabel = "Save Case Note",
   submittingLabel = "Saving...",
 }) {
-  const [form, setForm] = useState(() => createCaseNoteForm(initialCaseNote));
+  const [form, setForm] = useState(() =>
+    createCaseNoteForm(initialCaseNote, initialRoadmapStepIds)
+  );
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    setForm(createCaseNoteForm(initialCaseNote));
+    setForm(createCaseNoteForm(initialCaseNote, initialRoadmapStepIds));
     setError("");
-  }, [initialCaseNote]);
+  }, [initialCaseNote, initialRoadmapStepIds]);
 
   const updateField = (field, value) => {
     setForm((current) => ({
@@ -83,6 +90,11 @@ export default function CaseNoteEditor({
           required
         />
       </FormField>
+
+      <RoadmapStepPicker
+        value={form.roadmapStepIds}
+        onChange={(nextValue) => updateField("roadmapStepIds", nextValue)}
+      />
 
       <FormField label="Cause" htmlFor="cause" required>
         <textarea

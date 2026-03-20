@@ -27,6 +27,10 @@ const caseNoteSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    roadmapStepIds: {
+      type: [String],
+      default: [],
+    },
   },
   {
     timestamps: true,
@@ -44,4 +48,3 @@ caseNoteSchema.index({
 const CaseNote = mongoose.model("CaseNote", caseNoteSchema);
 
 export default CaseNote;
-

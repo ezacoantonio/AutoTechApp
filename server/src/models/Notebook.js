@@ -70,6 +70,10 @@ const notebookSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
+    roadmapStepIds: {
+      type: [String],
+      default: [],
+    },
     chapters: {
       type: [chapterSchema],
       default: [],
@@ -90,4 +94,3 @@ notebookSchema.index({
 const Notebook = mongoose.model("Notebook", notebookSchema);
 
 export default Notebook;
-

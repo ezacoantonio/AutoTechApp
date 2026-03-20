@@ -9,6 +9,7 @@ const TRACK_INTERVAL_SECONDS = 15;
 
 const sectionKeys = [
   "home",
+  "roadmap",
   "topics",
   "caseNotes",
   "notebooks",
@@ -115,6 +116,10 @@ const getSectionKey = (pathname) => {
 
   if (pathname.startsWith("/topics")) {
     return "topics";
+  }
+
+  if (pathname.startsWith("/roadmap")) {
+    return "roadmap";
   }
 
   if (pathname.startsWith("/case-notes")) {

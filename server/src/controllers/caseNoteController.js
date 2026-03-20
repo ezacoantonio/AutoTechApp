@@ -1,18 +1,11 @@
 import CaseNote from "../models/CaseNote.js";
-
-const sanitizeText = (value) => (typeof value === "string" ? value.trim() : "");
-
-const createHttpError = (statusCode, message) => {
-  const error = new Error(message);
-  error.statusCode = statusCode;
-  return error;
-};
-
-const escapeRegex = (value) =>
-  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+import { roadmapStepIdSet } from "../data/roadmapDefinition.js";
+import { createHttpError } from "../utils/http.js";
+import { escapeRegex, sanitizeStringArray, sanitizeText } from "../utils/text.js";
 
 const buildCaseNotePayload = (body) => ({
   vehicle: sanitizeText(body.vehicle),
+  roadmapStepIds: sanitizeStringArray(body.roadmapStepIds),
   problem: sanitizeText(body.problem),
   cause: sanitizeText(body.cause),
   fix: sanitizeText(body.fix),
@@ -27,6 +20,9 @@ const validateCaseNotePayload = (payload) => {
   if (!payload.cause) errors.push("Cause is required.");
   if (!payload.fix) errors.push("Fix is required.");
   if (!payload.lessonLearned) errors.push("Lesson learned is required.");
+  if (payload.roadmapStepIds.some((stepId) => !roadmapStepIdSet.has(stepId))) {
+    errors.push("One or more roadmap steps are invalid.");
+  }
 
   return errors;
 };
@@ -91,6 +87,7 @@ export const updateCaseNote = async (req, res) => {
   caseNote.cause = payload.cause;
   caseNote.fix = payload.fix;
   caseNote.lessonLearned = payload.lessonLearned;
+  caseNote.roadmapStepIds = payload.roadmapStepIds;
   await caseNote.save();
 
   res.json(caseNote);

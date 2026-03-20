@@ -36,6 +36,9 @@ export function createNotebookForm(notebook = null) {
   return {
     title: notebook?.title || "",
     summary: notebook?.summary || "",
+    roadmapStepIds: Array.isArray(notebook?.roadmapStepIds)
+      ? [...notebook.roadmapStepIds]
+      : [],
     chapters: chapters.length > 0 ? chapters : [createNotebookChapter()],
   };
 }
@@ -44,6 +47,9 @@ export function buildNotebookPayload(form) {
   return {
     title: form.title,
     summary: form.summary,
+    roadmapStepIds: Array.isArray(form.roadmapStepIds)
+      ? [...form.roadmapStepIds]
+      : [],
     chapters: form.chapters.map((chapter) => ({
       title: chapter.title,
       content: chapter.content,

@@ -1,9 +1,12 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { createCaseNote } from "../api/caseNotes.js";
 import CaseNoteEditor from "../components/CaseNoteEditor.jsx";
+import { getRoadmapStepIdsFromSearchParams } from "../utils/roadmap.js";
 
 export default function NewCaseNotePage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const initialRoadmapStepIds = getRoadmapStepIdsFromSearchParams(searchParams);
 
   const handleSubmit = async (payload) => {
     const caseNote = await createCaseNote(payload);
@@ -24,6 +27,7 @@ export default function NewCaseNotePage() {
       </section>
 
       <CaseNoteEditor
+        initialRoadmapStepIds={initialRoadmapStepIds}
         onSubmit={handleSubmit}
         submitLabel="Save Case Note"
         submittingLabel="Saving..."

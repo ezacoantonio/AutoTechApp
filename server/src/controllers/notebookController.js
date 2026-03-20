@@ -1,6 +1,7 @@
 import Notebook from "../models/Notebook.js";
+import { roadmapStepIdSet } from "../data/roadmapDefinition.js";
 import { createHttpError } from "../utils/http.js";
-import { escapeRegex, sanitizeText } from "../utils/text.js";
+import { escapeRegex, sanitizeStringArray, sanitizeText } from "../utils/text.js";
 
 const sanitizeImagePayload = (image = {}) => ({
   url: sanitizeText(image.url),
@@ -23,6 +24,7 @@ const sanitizeChapters = (chapters = []) =>
 const buildNotebookPayload = (body) => ({
   title: sanitizeText(body.title),
   summary: sanitizeText(body.summary),
+  roadmapStepIds: sanitizeStringArray(body.roadmapStepIds),
   chapters: sanitizeChapters(body.chapters),
 });
 
@@ -31,6 +33,10 @@ const validateNotebookPayload = (payload) => {
 
   if (!payload.title) {
     errors.push("Notebook title is required.");
+  }
+
+  if (payload.roadmapStepIds.some((stepId) => !roadmapStepIdSet.has(stepId))) {
+    errors.push("One or more roadmap steps are invalid.");
   }
 
   payload.chapters.forEach((chapter, index) => {
@@ -102,6 +108,7 @@ export const updateNotebook = async (req, res) => {
 
   notebook.title = payload.title;
   notebook.summary = payload.summary;
+  notebook.roadmapStepIds = payload.roadmapStepIds;
   notebook.chapters = payload.chapters;
   await notebook.save();
 

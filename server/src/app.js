@@ -8,6 +8,7 @@ import topicRoutes from "./routes/topicRoutes.js";
 import caseNoteRoutes from "./routes/caseNoteRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import notebookRoutes from "./routes/notebookRoutes.js";
+import roadmapRoutes from "./routes/roadmapRoutes.js";
 import recentlyDeletedRoutes from "./routes/recentlyDeletedRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import { notFound } from "./middleware/notFound.js";
@@ -59,6 +60,7 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/topics", topicRoutes);
 app.use("/api/case-notes", caseNoteRoutes);
 app.use("/api/notebooks", notebookRoutes);
+app.use("/api/roadmap", roadmapRoutes);
 app.use("/api/recently-deleted", recentlyDeletedRoutes);
 app.use("/api/uploads", uploadRoutes);
 

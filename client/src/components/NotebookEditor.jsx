@@ -6,23 +6,39 @@ import {
   createNotebookForm,
 } from "../utils/notebooks.js";
 import FormField from "./FormField.jsx";
+import RoadmapStepPicker from "./RoadmapStepPicker.jsx";
 
 export default function NotebookEditor({
   initialNotebook = null,
+  initialRoadmapStepIds = [],
   onSubmit,
   onCancel,
   submitLabel = "Save Notebook",
   submittingLabel = "Saving...",
   cancelLabel = "Cancel",
 }) {
-  const [form, setForm] = useState(() => createNotebookForm(initialNotebook));
+  const [form, setForm] = useState(() => {
+    const nextForm = createNotebookForm(initialNotebook);
+
+    if (!initialNotebook && initialRoadmapStepIds.length > 0) {
+      nextForm.roadmapStepIds = [...initialRoadmapStepIds];
+    }
+
+    return nextForm;
+  });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    setForm(createNotebookForm(initialNotebook));
+    const nextForm = createNotebookForm(initialNotebook);
+
+    if (!initialNotebook && initialRoadmapStepIds.length > 0) {
+      nextForm.roadmapStepIds = [...initialRoadmapStepIds];
+    }
+
+    setForm(nextForm);
     setError("");
-  }, [initialNotebook]);
+  }, [initialNotebook, initialRoadmapStepIds]);
 
   const updateField = (field, value) => {
     setForm((current) => ({
@@ -184,6 +200,11 @@ export default function NotebookEditor({
           />
         </FormField>
       </div>
+
+      <RoadmapStepPicker
+        value={form.roadmapStepIds}
+        onChange={(nextValue) => updateField("roadmapStepIds", nextValue)}
+      />
 
       {form.chapters.length > 0 ? (
         <div className="stack-md">

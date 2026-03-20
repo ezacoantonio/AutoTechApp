@@ -43,6 +43,10 @@ const topicSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    roadmapStepIds: {
+      type: [String],
+      default: [],
+    },
     isDeleted: {
       type: Boolean,
       default: false,

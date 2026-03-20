@@ -3,10 +3,18 @@ import { Link } from "react-router-dom";
 import { listCategories } from "../api/categories.js";
 import EmptyState from "./EmptyState.jsx";
 import FormField from "./FormField.jsx";
+import RoadmapStepPicker from "./RoadmapStepPicker.jsx";
 
-const createTopicForm = (topic = null, fallbackCategoryId = "") => ({
+const createTopicForm = (
+  topic = null,
+  fallbackCategoryId = "",
+  fallbackRoadmapStepIds = []
+) => ({
   title: topic?.title || "",
   categoryId: topic?.categoryId || fallbackCategoryId,
+  roadmapStepIds: Array.isArray(topic?.roadmapStepIds)
+    ? [...topic.roadmapStepIds]
+    : [...fallbackRoadmapStepIds],
   whatItIs: topic?.whatItIs || "",
   commonFailures: topic?.commonFailures || "",
   symptoms: topic?.symptoms || "",
@@ -16,12 +24,15 @@ const createTopicForm = (topic = null, fallbackCategoryId = "") => ({
 
 export default function TopicEditor({
   initialTopic = null,
+  initialRoadmapStepIds = [],
   onSubmit,
   onCancel,
   submitLabel = "Save Topic",
   submittingLabel = "Saving...",
 }) {
-  const [form, setForm] = useState(() => createTopicForm(initialTopic));
+  const [form, setForm] = useState(() =>
+    createTopicForm(initialTopic, "", initialRoadmapStepIds)
+  );
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -42,7 +53,10 @@ export default function TopicEditor({
         setForm((current) =>
           createTopicForm(
             initialTopic,
-            current.categoryId || initialTopic?.categoryId || data[0]?._id || ""
+            current.categoryId || initialTopic?.categoryId || data[0]?._id || "",
+            current.roadmapStepIds.length > 0
+              ? current.roadmapStepIds
+              : initialTopic?.roadmapStepIds || initialRoadmapStepIds
           )
         );
       } catch (err) {
@@ -62,7 +76,7 @@ export default function TopicEditor({
     return () => {
       mounted = false;
     };
-  }, [initialTopic]);
+  }, [initialRoadmapStepIds, initialTopic]);
 
   const updateField = (field, value) => {
     setForm((current) => ({
@@ -153,6 +167,11 @@ export default function TopicEditor({
               ))}
             </select>
           </FormField>
+
+          <RoadmapStepPicker
+            value={form.roadmapStepIds}
+            onChange={(nextValue) => updateField("roadmapStepIds", nextValue)}
+          />
 
           <FormField
             label="What It Is"

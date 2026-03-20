@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 
 const navItems = [
   { to: "/", label: "Home", end: true },
+  { to: "/roadmap", label: "ASE Roadmap" },
   { to: "/topics", label: "Study Topics" },
   { to: "/categories", label: "Categories" },
   { to: "/case-notes", label: "Case Notes" },

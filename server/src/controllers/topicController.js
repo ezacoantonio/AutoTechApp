@@ -1,11 +1,13 @@
 import Category from "../models/Category.js";
 import Topic from "../models/Topic.js";
+import { roadmapStepIdSet } from "../data/roadmapDefinition.js";
 import { createHttpError } from "../utils/http.js";
-import { escapeRegex, sanitizeText } from "../utils/text.js";
+import { escapeRegex, sanitizeStringArray, sanitizeText } from "../utils/text.js";
 
 const buildTopicPayload = (body) => ({
   title: sanitizeText(body.title),
   categoryId: sanitizeText(body.categoryId),
+  roadmapStepIds: sanitizeStringArray(body.roadmapStepIds),
   whatItIs: sanitizeText(body.whatItIs),
   commonFailures: sanitizeText(body.commonFailures),
   symptoms: sanitizeText(body.symptoms),
@@ -23,6 +25,9 @@ const validateTopicPayload = (payload) => {
   if (!payload.symptoms) errors.push("Symptoms is required.");
   if (!payload.diagnosis) errors.push("How to diagnose it is required.");
   if (!payload.recommendedFix) errors.push("Recommended fix is required.");
+  if (payload.roadmapStepIds.some((stepId) => !roadmapStepIdSet.has(stepId))) {
+    errors.push("One or more roadmap steps are invalid.");
+  }
 
   return errors;
 };
@@ -137,6 +142,7 @@ export const updateTopic = async (req, res) => {
   topic.symptoms = payload.symptoms;
   topic.diagnosis = payload.diagnosis;
   topic.recommendedFix = payload.recommendedFix;
+  topic.roadmapStepIds = payload.roadmapStepIds;
   await topic.save();
 
   res.json(topic);

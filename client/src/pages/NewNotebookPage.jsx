@@ -1,9 +1,12 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { createNotebook } from "../api/notebooks.js";
 import NotebookEditor from "../components/NotebookEditor.jsx";
+import { getRoadmapStepIdsFromSearchParams } from "../utils/roadmap.js";
 
 export default function NewNotebookPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const initialRoadmapStepIds = getRoadmapStepIdsFromSearchParams(searchParams);
 
   const handleSubmit = async (payload) => {
     const notebook = await createNotebook(payload);
@@ -24,6 +27,7 @@ export default function NewNotebookPage() {
       </section>
 
       <NotebookEditor
+        initialRoadmapStepIds={initialRoadmapStepIds}
         onSubmit={handleSubmit}
         submitLabel="Save Notebook"
         submittingLabel="Saving Notebook..."

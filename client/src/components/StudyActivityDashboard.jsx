@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 const sectionLabels = {
   home: "Home",
+  roadmap: "ASE Roadmap",
   topics: "Study Topics",
   caseNotes: "Case Notes",
   notebooks: "Notebooks",

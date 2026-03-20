@@ -13,6 +13,7 @@ import EditCaseNotePage from "./pages/EditCaseNotePage.jsx";
 import NotebooksPage from "./pages/NotebooksPage.jsx";
 import NotebookDetailPage from "./pages/NotebookDetailPage.jsx";
 import NewNotebookPage from "./pages/NewNotebookPage.jsx";
+import RoadmapPage from "./pages/RoadmapPage.jsx";
 import RecentlyDeletedPage from "./pages/RecentlyDeletedPage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 import { ActivityProvider } from "./context/ActivityContext.jsx";
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="notebooks" element={<NotebooksPage />} />
             <Route path="notebooks/new" element={<NewNotebookPage />} />
             <Route path="notebooks/:notebookId" element={<NotebookDetailPage />} />
+            <Route path="roadmap" element={<RoadmapPage />} />
             <Route path="recently-deleted" element={<RecentlyDeletedPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>

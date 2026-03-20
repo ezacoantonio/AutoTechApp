@@ -1,4 +1,5 @@
 import { DEFAULT_CATEGORY_NAMES } from "../constants/categories.js";
+import { ROADMAP_STEP_IDS } from "./roadmapDefinition.js";
 
 export const seedCategories = DEFAULT_CATEGORY_NAMES.map((name) => ({
   name,
@@ -9,6 +10,7 @@ export const seedTopics = [
   {
     title: "Mass Air Flow Sensor",
     category: "Fuel and Air Systems",
+    roadmapStepIds: [ROADMAP_STEP_IDS.airMeteringFuelTrim],
     whatItIs:
       "The mass air flow sensor measures how much air is entering the engine so the PCM can calculate the correct fuel delivery.",
     commonFailures:
@@ -23,6 +25,7 @@ export const seedTopics = [
   {
     title: "Thermostat",
     category: "Cooling Systems",
+    roadmapStepIds: [ROADMAP_STEP_IDS.coolingSystemControl],
     whatItIs:
       "The thermostat regulates coolant flow to help the engine reach operating temperature quickly and stay in the correct range.",
     commonFailures:
@@ -37,6 +40,7 @@ export const seedTopics = [
   {
     title: "Ignition Coil",
     category: "Electrical Systems",
+    roadmapStepIds: [ROADMAP_STEP_IDS.ignitionMisfireStrategy],
     whatItIs:
       "An ignition coil converts battery voltage into the high voltage needed to fire the spark plug.",
     commonFailures:
@@ -53,6 +57,7 @@ export const seedTopics = [
 export const seedCaseNotes = [
   {
     vehicle: "2014 Honda Civic 1.8L",
+    roadmapStepIds: [ROADMAP_STEP_IDS.airMeteringFuelTrim],
     problem: "Engine stumbled on acceleration and set a lean condition code.",
     cause:
       "A split intake boot after the MAF sensor was allowing unmetered air into the engine.",
@@ -63,6 +68,7 @@ export const seedCaseNotes = [
   },
   {
     vehicle: "2012 Ford Escape 3.0L",
+    roadmapStepIds: [ROADMAP_STEP_IDS.coolingSystemControl],
     problem: "Customer complaint was overheating after 15 minutes of driving.",
     cause:
       "The thermostat was stuck closed, preventing normal coolant circulation.",
@@ -76,6 +82,10 @@ export const seedCaseNotes = [
 export const seedNotebooks = [
   {
     title: "Electrical Diagnostics Playbook",
+    roadmapStepIds: [
+      ROADMAP_STEP_IDS.powerGroundIntegrity,
+      ROADMAP_STEP_IDS.sensorCircuitBasics,
+    ],
     summary:
       "Quick-reference notebook for tracing power, ground, and signal faults in real-world diagnostic work.",
     chapters: [
