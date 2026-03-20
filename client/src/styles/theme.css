@@ -1,0 +1,22 @@
+:root {
+  --font-heading: "Trebuchet MS", "Segoe UI", sans-serif;
+  --font-body: "Verdana", "Segoe UI", sans-serif;
+  --color-ink: #1d2a31;
+  --color-muted: #61727a;
+  --color-bg: #f4f0e8;
+  --color-surface: rgba(255, 255, 255, 0.8);
+  --color-surface-strong: #ffffff;
+  --color-border: rgba(29, 42, 49, 0.12);
+  --color-primary: #0f5d73;
+  --color-primary-strong: #0b4657;
+  --color-accent: #d98c2b;
+  --color-success: #246847;
+  --color-error: #a13434;
+  --shadow-soft: 0 18px 40px rgba(15, 38, 45, 0.08);
+  --shadow-card: 0 10px 24px rgba(15, 38, 45, 0.08);
+  --radius-lg: 24px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+  --page-max: 1120px;
+}
+
