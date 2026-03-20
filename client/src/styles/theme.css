@@ -1,22 +1,25 @@
 :root {
   --font-heading: "Trebuchet MS", "Segoe UI", sans-serif;
   --font-body: "Verdana", "Segoe UI", sans-serif;
-  --color-ink: #1d2a31;
-  --color-muted: #61727a;
-  --color-bg: #f4f0e8;
-  --color-surface: rgba(255, 255, 255, 0.8);
+  --color-ink: #202329;
+  --color-muted: #646b75;
+  --color-bg: #eef0f3;
+  --color-surface: rgba(255, 255, 255, 0.84);
   --color-surface-strong: #ffffff;
-  --color-border: rgba(29, 42, 49, 0.12);
-  --color-primary: #0f5d73;
-  --color-primary-strong: #0b4657;
-  --color-accent: #d98c2b;
-  --color-success: #246847;
-  --color-error: #a13434;
-  --shadow-soft: 0 18px 40px rgba(15, 38, 45, 0.08);
-  --shadow-card: 0 10px 24px rgba(15, 38, 45, 0.08);
+  --color-border: rgba(32, 35, 41, 0.12);
+  --color-primary: #b12032;
+  --color-primary-strong: #7c1623;
+  --color-accent: #d64052;
+  --color-silver: #cfd5dd;
+  --color-silver-strong: #9ca5b1;
+  --color-charcoal: #2b2f36;
+  --color-charcoal-soft: #474d57;
+  --color-success: #2a744d;
+  --color-error: #a62e3a;
+  --shadow-soft: 0 20px 40px rgba(18, 21, 27, 0.1);
+  --shadow-card: 0 12px 28px rgba(18, 21, 27, 0.08);
   --radius-lg: 24px;
   --radius-md: 18px;
   --radius-sm: 12px;
   --page-max: 1120px;
 }
-
