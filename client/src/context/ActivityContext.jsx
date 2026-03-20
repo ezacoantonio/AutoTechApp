@@ -1,15 +1,10 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useEffectEvent,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 const ActivityContext = createContext(null);
 const STORAGE_KEY = "mechanic-mindset-activity-v1";
 const SESSION_KEY = "mechanic-mindset-session-started";
+const SESSION_FALLBACK_KEY = "__mechanicMindsetSessionStarted";
 const TRACK_INTERVAL_SECONDS = 15;
 
 const sectionKeys = [
@@ -40,6 +35,10 @@ const getLocalDateKey = (date = new Date()) =>
   ).padStart(2, "0")}`;
 
 const readStoredActivity = () => {
+  if (typeof window === "undefined") {
+    return createEmptyActivity();
+  }
+
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
 
@@ -68,7 +67,45 @@ const readStoredActivity = () => {
 };
 
 const writeStoredActivity = (activity) => {
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(activity));
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(activity));
+  } catch {
+    // Ignore storage failures so routing never depends on browser storage support.
+  }
+};
+
+const readSessionStarted = () => {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  try {
+    if (window.sessionStorage.getItem(SESSION_KEY) === "true") {
+      return true;
+    }
+  } catch {
+    // Fall back to an in-memory flag below.
+  }
+
+  return Boolean(window[SESSION_FALLBACK_KEY]);
+};
+
+const markSessionStarted = () => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window[SESSION_FALLBACK_KEY] = true;
+
+  try {
+    window.sessionStorage.setItem(SESSION_KEY, "true");
+  } catch {
+    // Ignore session storage failures and rely on the in-memory fallback.
+  }
 };
 
 const getSectionKey = (pathname) => {
@@ -185,24 +222,25 @@ const trackStudyTime = (activity, sectionKey, seconds) => {
 export function ActivityProvider({ children }) {
   const location = useLocation();
   const [activity, setActivity] = useState(() => readStoredActivity());
+  const hasStartedSessionRef = useRef(readSessionStarted());
 
-  const persistActivity = useEffectEvent((updater) => {
+  useEffect(() => {
+    const sectionKey = getSectionKey(location.pathname);
+
     setActivity((current) => {
-      const next = typeof updater === "function" ? updater(current) : updater;
+      const next = hasStartedSessionRef.current
+        ? trackSectionView(current, sectionKey)
+        : incrementVisit(current, sectionKey);
+
+      if (!hasStartedSessionRef.current) {
+        hasStartedSessionRef.current = true;
+        markSessionStarted();
+      }
+
       writeStoredActivity(next);
       return next;
     });
-  });
-
-  useEffect(() => {
-    if (!window.sessionStorage.getItem(SESSION_KEY)) {
-      window.sessionStorage.setItem(SESSION_KEY, "true");
-      persistActivity((current) => incrementVisit(current, getSectionKey(location.pathname)));
-      return;
-    }
-
-    persistActivity((current) => trackSectionView(current, getSectionKey(location.pathname)));
-  }, [location.pathname, persistActivity]);
+  }, [location.pathname]);
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
@@ -210,15 +248,21 @@ export function ActivityProvider({ children }) {
         return;
       }
 
-      persistActivity((current) =>
-        trackStudyTime(current, getSectionKey(window.location.pathname), TRACK_INTERVAL_SECONDS)
-      );
+      setActivity((current) => {
+        const next = trackStudyTime(
+          current,
+          getSectionKey(window.location.pathname),
+          TRACK_INTERVAL_SECONDS
+        );
+        writeStoredActivity(next);
+        return next;
+      });
     }, TRACK_INTERVAL_SECONDS * 1000);
 
     return () => {
       window.clearInterval(intervalId);
     };
-  }, [persistActivity]);
+  }, []);
 
   return (
     <ActivityContext.Provider value={{ activity }}>
