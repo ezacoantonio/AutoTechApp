@@ -1,0 +1,22 @@
+{
+  "name": "Mechanic Mindset",
+  "short_name": "Mechanic Mindset",
+  "description": "A lightweight study and diagnostic case notes app for automotive technicians.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#1f2227",
+  "theme_color": "#1f2227",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
